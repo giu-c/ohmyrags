@@ -6,6 +6,7 @@ from qdrant_client.models import SparseVector, Prefetch, FusionQuery, Fusion
 from fastembed import SparseTextEmbedding
 from dotenv import load_dotenv
 from embedding_model import load_embedding_model, get_embeddings
+import time
 
 # Setup
 load_dotenv()
@@ -18,6 +19,8 @@ st.set_page_config(
 # --- STATO DEL VIDEO ---
 if 'video_active' not in st.session_state:
     st.session_state.video_active = True
+if 'video_start_time' not in st.session_state:
+    st.session_state.video_start_time = time.time()
 
 def skip_video():
     st.session_state.video_active = False
@@ -110,6 +113,16 @@ st.markdown("""
         border: 1px solid rgba(128, 128, 128, 0.1);
         font-size: 0.9rem;
     }
+    
+    .timer-display {
+        text-align: right;
+        color: #888;
+        font-weight: 500;
+        padding: 0.5rem;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 5px;
+        border: 1px solid rgba(128, 128, 128, 0.1);
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -148,14 +161,24 @@ def generate_answer(query, selected_docs):
 
 # 1. VIDEO OVERLAY (Se attivo)
 if st.session_state.video_active:
+    # Controllo timer automatico
+    elapsed_time = time.time() - st.session_state.video_start_time
+    remaining_time = max(0, 35 - int(elapsed_time))
+    
+    if remaining_time == 0:
+        st.session_state.video_active = False
+        st.rerun()
+    
     empty_l, content_col, empty_r = st.columns([0.05, 0.9, 0.05])
     
     with content_col:
-        col_header, col_btn = st.columns([0.7, 0.2])
+        col_header, col_btn, col_timer = st.columns([0.5, 0.2, 0.3])
         with col_header:
             st.markdown("<h3 style='margin: 0;'>🔮 OHmyRAGS! ✨</h3>", unsafe_allow_html=True)
         with col_btn:
             st.button("⏩ Salta Video", on_click=skip_video, use_container_width=True)
+        with col_timer:
+            st.markdown(f'<div class="timer-display">⏰ Auto-salto in: {remaining_time}s</div>', unsafe_allow_html=True)
         
         st.markdown("<div style='margin-bottom: 15px;'></div>", unsafe_allow_html=True)
         
