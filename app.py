@@ -184,7 +184,7 @@ with st.sidebar:
 st.markdown("### 💬 Inserisci la tua domanda")
 col_q1, col_q2 = st.columns([4, 1])
 with col_q1:
-    query = st.text_input("Domanda", placeholder='''Cosa desideri sapere? Esempi: "Spiegami in maniera semplice il fuorigioco", "Quando un giocatore va espulso?", "Che cos'è il VAR?"''', label_visibility="collapsed")
+    query = st.text_input("Domanda", placeholder='''"Spiegami in maniera semplice il fuorigioco" o "Quando un giocatore va espulso?"''', label_visibility="collapsed")
 with col_q2:
     search_btn = st.button("🔎 Cerca", type="primary", use_container_width=True)
 
