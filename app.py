@@ -177,14 +177,14 @@ with st.sidebar:
     st.markdown("---")
     top_k = st.slider("Quanti documenti recuperare? 🤔", 5, 100, 30)
     st.markdown("---")
-    auto_select_top = st.number_input("✅ Documenti da pre-selezionare: ", 0, 10, 3)
+    auto_select_top = st.number_input("✅ Documenti da pre-selezionare: ", 0, 10, 5)
     st.markdown("---")
     show_full_text = st.checkbox("🧐​ Mostra tutto il testo 📖", value=False)
 
 st.markdown("### 💬 Inserisci la tua domanda")
 col_q1, col_q2 = st.columns([4, 1])
 with col_q1:
-    query = st.text_input("Domanda", placeholder='''"Spiegami in maniera semplice il fuorigioco" o "Quando un giocatore va espulso?"''', label_visibility="collapsed")
+    query = st.text_input("Domanda", placeholder="Spiegami in maniera semplice il fuorigioco", label_visibility="collapsed")
 with col_q2:
     search_btn = st.button("🔎 Cerca", type="primary", use_container_width=True)
 
