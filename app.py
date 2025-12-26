@@ -19,8 +19,6 @@ st.set_page_config(
 # --- STATO DEL VIDEO ---
 if 'video_active' not in st.session_state:
     st.session_state.video_active = True
-if 'video_start_time' not in st.session_state:
-    st.session_state.video_start_time = time.time()
 
 def skip_video():
     st.session_state.video_active = False
@@ -161,34 +159,42 @@ def generate_answer(query, selected_docs):
 
 # 1. VIDEO OVERLAY (Se attivo)
 if st.session_state.video_active:
-    # Controllo timer automatico
-    elapsed_time = time.time() - st.session_state.video_start_time
-    remaining_time = max(0, 35 - int(elapsed_time))
+    # Approccio con st.empty() e time.sleep()
+    video_placeholder = st.empty()
     
-    if remaining_time == 0:
+    with video_placeholder.container():
+        # Controllo timer con conto alla rovescia
+        for remaining in range(45, 0, -1):
+            empty_l, content_col, empty_r = st.columns([0.05, 0.9, 0.05])
+            
+            with content_col:
+                col_header, col_btn, col_timer = st.columns([0.5, 0.2, 0.3])
+                with col_header:
+                    st.markdown("<h3 style='margin: 0;'>🔮 OHmyRAGS! ✨</h3>", unsafe_allow_html=True)
+                with col_btn:
+                    if st.button("⏩ Salta Video", key="skip_btn", use_container_width=True):
+                        skip_video()
+                        st.rerun()
+                with col_timer:
+                    st.markdown(f'<div class="timer-display">⏰ Auto-salto in: {remaining}s</div>', unsafe_allow_html=True)
+                
+                st.markdown("<div style='margin-bottom: 15px;'></div>", unsafe_allow_html=True)
+                
+                if os.path.exists("video.mp4"):
+                    st.video("video.mp4", autoplay=True)
+                else:
+                    st.warning("File 'video.mp4' non trovato. Passando all'app...")
+                    skip_video()
+                    st.rerun()
+                
+                # Aggiorna ogni secondo
+                time.sleep(1)
+                st.rerun()
+        
+        # Dopo 35 secondi, nascondi il video
+        video_placeholder.empty()
         st.session_state.video_active = False
         st.rerun()
-    
-    empty_l, content_col, empty_r = st.columns([0.05, 0.9, 0.05])
-    
-    with content_col:
-        col_header, col_btn, col_timer = st.columns([0.5, 0.2, 0.3])
-        with col_header:
-            st.markdown("<h3 style='margin: 0;'>🔮 OHmyRAGS! ✨</h3>", unsafe_allow_html=True)
-        with col_btn:
-            st.button("⏩ Salta Video", on_click=skip_video, use_container_width=True)
-        with col_timer:
-            st.markdown(f'<div class="timer-display">⏰ Auto-salto in: {remaining_time}s</div>', unsafe_allow_html=True)
-        
-        st.markdown("<div style='margin-bottom: 15px;'></div>", unsafe_allow_html=True)
-        
-        if os.path.exists("video.mp4"):
-            st.video("video.mp4", autoplay=True)
-        else:
-            st.warning("File 'video.mp4' non trovato. Passando all'app...")
-            skip_video()
-            
-    st.stop()
 
 # 2. APP PRINCIPALE
 st.markdown("""<div class="main-header"><h1>🔮 OHmyRAGS! ✨</h1></div>""", unsafe_allow_html=True)
