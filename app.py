@@ -155,7 +155,7 @@ if st.session_state.video_active:
         with col_header:
             st.markdown("<h3 style='margin: 0;'>🔮 OHmyRAGS! ✨</h3>", unsafe_allow_html=True)
         with col_btn:
-            st.button("⏩ Salta Video", on_click=skip_video, use_container_width=True)
+            st.button("⏩ Vai all'app", on_click=skip_video, use_container_width=True)
         
         st.markdown("<div style='margin-bottom: 15px;'></div>", unsafe_allow_html=True)
         
