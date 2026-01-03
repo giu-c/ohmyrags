@@ -1,7 +1,7 @@
 name: Wake Up Streamlit (Playwright)
 on:
   schedule:
-    - cron: '0 */6 * * *' # Viene eseguito 2 volte al giorno (ore 9 e 21 UTC)
+    - cron: '0 */6 * * *' # Viene eseguito 4 volte al giorno (ore 9 e 21 UTC)
   workflow_dispatch:      # Ti permette di testarlo manualmente con un click
 
 jobs:
