@@ -1,0 +1,45 @@
+name: Wake Up Streamlit (Playwright)
+on:
+  schedule:
+    - cron: '0 */6 * * *' # Viene eseguito 2 volte al giorno (ore 9 e 21 UTC)
+  workflow_dispatch:      # Ti permette di testarlo manualmente con un click
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright
+        run: |
+          npm install playwright
+          npx playwright install chromium --with-deps
+
+      - name: Run Headless Browser
+        run: |
+          node -e "
+          const { chromium } = require('playwright');
+          (async () => {
+            const browser = await chromium.launch({ headless: true });
+            const page = await browser.newPage();
+            console.log('Navigazione verso l\'app...');
+            try {
+              // Sostituisci con il tuo URL reale
+              await page.goto('https://ohmyrags.streamlit.app', { waitUntil: 'networkidle', timeout: 60000 });
+              console.log('Pagina caricata correttamente');
+              // Aspettiamo che Streamlit carichi i componenti core
+              await page.waitForTimeout(10000); 
+              console.log('Sessione WebSocket stabilita. App sveglia!');
+            } catch (e) {
+              console.error('Errore durante il caricamento:', e.message);
+              process.exit(1);
+            }
+            await browser.close();
+          })();
+          "
