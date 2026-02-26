@@ -41,5 +41,7 @@ jobs:
               process.exit(1);
             }
             await browser.close();
+
+# ciao zì!
           })();
           "
