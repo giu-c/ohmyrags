@@ -1,8 +1,9 @@
 name: Wake Up Streamlit (Playwright)
+
 on:
   schedule:
-    - cron: '0 */6 * * *' # Viene eseguito 4 volte al giorno
-  workflow_dispatch:    
+    - cron: '0 */6 * * *' # Viene eseguito ogni 6 ore
+  workflow_dispatch:      # Permette l'esecuzione manuale
 
 jobs:
   keep-alive:
@@ -30,10 +31,8 @@ jobs:
             const page = await browser.newPage();
             console.log('Navigazione verso l\'app...');
             try {
-              // Sostituisci con il tuo URL reale
               await page.goto('https://ohmyrags.streamlit.app', { waitUntil: 'networkidle', timeout: 60000 });
               console.log('Pagina caricata correttamente');
-              // Aspettiamo che Streamlit carichi i componenti core
               await page.waitForTimeout(10000); 
               console.log('Sessione WebSocket stabilita. App sveglia!');
             } catch (e) {
@@ -43,6 +42,3 @@ jobs:
             await browser.close();
           })();
           "
-
-# ciao zì!
-
