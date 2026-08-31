@@ -2,7 +2,7 @@ name: Wake Up Streamlit (Playwright)
 
 on:
   schedule:
-    - cron: '0 */6 * * *' # Viene eseguito ogni 6 ore
+    - cron: '0 */6 * * *'
   workflow_dispatch:      # Permette l'esecuzione manuale
 
 jobs:
@@ -41,6 +41,8 @@ jobs:
             }
             await browser.close();
           })();
+          
+
           "
 # Ciao gino!
 # Ciao nenno!
