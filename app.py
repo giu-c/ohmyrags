@@ -243,3 +243,5 @@ if st.session_state.results:
                 preview = text[:350] + "..." if len(text) > 350 else text
                 st.markdown(f'<div class="preview-text">{preview}</div>', unsafe_allow_html=True)
         st.markdown("<div style='margin-bottom: 10px;'></div>", unsafe_allow_html=True)
+
+# ...
